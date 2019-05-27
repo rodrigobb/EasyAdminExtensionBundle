@@ -2,10 +2,9 @@
 
 namespace AlterPHP\EasyAdminExtensionBundle\EventListener;
 
-use AlterPHP\EasyAdminExtensionBundle\EventListener\AbstractPostQueryBuilderSubscriber;
 use AlterPHP\EasyAdminExtensionBundle\Model\ListFilter;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\QueryException;
+use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 
 /**

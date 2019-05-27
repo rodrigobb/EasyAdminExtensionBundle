@@ -16,7 +16,7 @@ abstract class AbstractPostQueryBuilderSubscriber implements EventSubscriberInte
     /**
      * Tests if $queryBuilder is supported.
      *
-     * @param  object $queryBuilder
+     * @param object $queryBuilder
      *
      * @return bool
      */

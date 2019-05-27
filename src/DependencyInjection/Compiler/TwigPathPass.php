@@ -3,7 +3,6 @@
 namespace AlterPHP\EasyAdminExtensionBundle\DependencyInjection\Compiler;
 
 use AlterPHP\EasyAdminExtensionBundle\EasyAdminExtensionBundle;
-use EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -29,7 +28,7 @@ class TwigPathPass implements CompilerPassInterface
             // Put back user default path
             $twigDefaultPath = $container->getParameterBag()->resolveValue('%twig.default_path%');
             $userDefaultPath = $twigDefaultPath.'/bundles/EasyAdminMongoOdmBundle/';
-            if (file_exists($userDefaultPath)) {
+            if (\file_exists($userDefaultPath)) {
                 $twigLoaderFilesystemDefinition->addMethodCall(
                     'prependPath',
                     [$userDefaultPath, 'EasyAdminMongoOdm']
