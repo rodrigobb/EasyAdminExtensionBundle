@@ -5,6 +5,8 @@ namespace AlterPHP\EasyAdminExtensionBundle\Controller;
 use AlterPHP\EasyAdminExtensionBundle\Security\AdminAuthorizationChecker;
 use AlterPHP\EasyAdminMongoOdmBundle\Controller\EasyAdminController as BaseEasyAdminController;
 use AlterPHP\EasyAdminMongoOdmBundle\Event\EasyAdminMongoOdmEvents;
+use League\Uri\Modifiers\RemoveQueryParams;
+use League\Uri\Schemes\Http;
 
 class MongoOdmEasyAdminController extends BaseEasyAdminController
 {
@@ -28,11 +30,32 @@ class MongoOdmEasyAdminController extends BaseEasyAdminController
 
         $this->dispatch(EasyAdminMongoOdmEvents::POST_LIST, ['paginator' => $paginator]);
 
+        // Filter displaid columns
+        $hiddenFields = $this->request->query->get('hidden-fields', []);
+        $fields = \array_filter(
+            $this->document['list']['fields'],
+            function ($name) use ($hiddenFields) {
+                return !\in_array($name, $hiddenFields);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        // Removes existing referer
+        $baseMasterRequestUri = !$this->request->isXmlHttpRequest()
+                            ? $this->get('request_stack')->getMasterRequest()->getUri()
+                            : $this->request->headers->get('referer');
+        $baseMasterRequestUri = Http::createFromString($baseMasterRequestUri);
+        $removeRefererModifier = new RemoveQueryParams(['referer']);
+        $masterRequestUri = $removeRefererModifier->process($baseMasterRequestUri);
+
+        $requestParameters = $this->request->query->all();
+        $requestParameters['referer'] = (string) $masterRequestUri;
+
         return $this->render('@EasyAdminExtension/default/embedded_list.html.twig', [
             'objectType' => 'document',
             'paginator' => $paginator,
             'fields' => $fields,
-            'masterRequest' => $this->get('request_stack')->getMasterRequest(),
+            '_request_parameters' => $requestParameters,
         ]);
     }
 

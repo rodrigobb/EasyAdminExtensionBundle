@@ -61,7 +61,6 @@ class EasyAdminEmbeddedListType extends AbstractType
         $parentData = $form->getParent()->getData();
         $embeddedListEntity = $options['entity'];
         $embeddedListFilters = $options['filters'];
-
         // Guess entity FQCN from parent metadata
         $entityFqcn = $this->embeddedListHelper->getEntityFqcnFromParent(\get_class($parentData), $form->getName());
         if (null !== $entityFqcn) {
@@ -71,7 +70,6 @@ class EasyAdminEmbeddedListType extends AbstractType
                 $embeddedListEntity = $this->embeddedListHelper->guessEntityEntry($entityFqcn);
             }
         }
-
         $view->vars['entity'] = $embeddedListEntity;
         $view->vars['parent_object_property'] = $form->getConfig()->getName();
 
@@ -84,7 +82,6 @@ class EasyAdminEmbeddedListType extends AbstractType
 
             return $filter;
         }, $embeddedListFilters);
-
         $view->vars['filters'] = $filters;
     }
 
@@ -103,7 +100,6 @@ class EasyAdminEmbeddedListType extends AbstractType
 
             return $filter;
         }, $embeddedListFilters);
-
         $view->vars['filters'] = $filters;
     }
 
